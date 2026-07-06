@@ -1,0 +1,15 @@
+{
+  "description": "Jeu d'amorçage SONORA. Chaque entrée est résolue via l'API MusicBrainz (recherche par nom, meilleur score) puis importée dans Neo4j. Un MBID explicite peut être fourni pour un import déterministe.",
+  "artists": [
+    { "name": "Daft Punk", "mbid": "056e4f3e-d505-4dad-8ec1-d04f521cbb56" },
+    { "name": "Stromae" },
+    { "name": "Angèle" },
+    { "name": "Beyoncé" },
+    { "name": "Jay-Z" },
+    { "name": "Kendrick Lamar" },
+    { "name": "Ninho" },
+    { "name": "Damso" },
+    { "name": "SCH" },
+    { "name": "PNL" }
+  ]
+}

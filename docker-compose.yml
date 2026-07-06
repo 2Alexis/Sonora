@@ -1,0 +1,76 @@
+services:
+  # --------------------------------------------------------------------- #
+  # Base de données graphe
+  # --------------------------------------------------------------------- #
+  neo4j:
+    image: neo4j:5.26-community
+    container_name: sonora-neo4j
+    ports:
+      - "7474:7474"   # Neo4j Browser (interface web)
+      - "7687:7687"   # Protocole Bolt (driver)
+    environment:
+      NEO4J_AUTH: "${NEO4J_USER:-neo4j}/${NEO4J_PASSWORD:-sonora_dev_password}"
+      NEO4J_PLUGINS: '["apoc"]'
+      NEO4J_dbms_security_procedures_unrestricted: "apoc.*"
+      NEO4J_server_memory_pagecache_size: "512M"
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:7474 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
+  # --------------------------------------------------------------------- #
+  # API backend (FastAPI)
+  # --------------------------------------------------------------------- #
+  backend:
+    build: ./backend
+    container_name: sonora-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      # Rend le jeu d'amorçage accessible au script seed (python -m scripts.seed).
+      - ./data:/data:ro
+    environment:
+      NEO4J_URI: "bolt://neo4j:7687"
+      NEO4J_USER: "${NEO4J_USER:-neo4j}"
+      NEO4J_PASSWORD: "${NEO4J_PASSWORD:-sonora_dev_password}"
+      NEO4J_DATABASE: "${NEO4J_DATABASE:-neo4j}"
+      MUSICBRAINZ_USER_AGENT: "${MUSICBRAINZ_USER_AGENT:-SONORA/1.0 (contact@example.com)}"
+      LASTFM_API_KEY: "${LASTFM_API_KEY:-}"
+      ENRICHMENT_ENABLED: "${ENRICHMENT_ENABLED:-true}"
+      CORS_ORIGINS: "${CORS_ORIGINS:-http://localhost:5173,http://localhost:3000}"
+      APP_ENV: "${APP_ENV:-development}"
+    depends_on:
+      neo4j:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8000/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    restart: unless-stopped
+
+  # --------------------------------------------------------------------- #
+  # Frontend (React + Vite) — activé une fois le front construit.
+  # Décommente ce bloc quand backend/data first sera terminé.
+  # --------------------------------------------------------------------- #
+  # frontend:
+  #   build: ./frontend
+  #   container_name: sonora-frontend
+  #   ports:
+  #     - "5173:80"
+  #   environment:
+  #     VITE_API_URL: "http://localhost:8000/api"
+  #   depends_on:
+  #     - backend
+  #   restart: unless-stopped
+
+volumes:
+  neo4j_data:
+  neo4j_logs:
