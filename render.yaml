@@ -12,16 +12,16 @@ services:
     envVars:
       - key: APP_ENV
         value: production
-      - key: NEO4J_USER
-        value: neo4j
-      - key: NEO4J_DATABASE
-        value: neo4j
       - key: ENRICHMENT_ENABLED
         value: "true"
-      # --- Secrets à renseigner dans le dashboard Render ---
-      - key: NEO4J_URI            # ex : neo4j+s://xxxx.databases.neo4j.io  (Neo4j Aura)
+      # --- À renseigner dans le dashboard Render (recopier depuis le fichier Aura) ---
+      - key: NEO4J_URI            # NEO4J_URI du fichier Aura (neo4j+s://xxxx.databases.neo4j.io)
         sync: false
-      - key: NEO4J_PASSWORD       # mot de passe de l'instance Aura
+      - key: NEO4J_USER           # NEO4J_USERNAME du fichier Aura (souvent l'ID d'instance, ex : 51da6f6a)
+        sync: false
+      - key: NEO4J_PASSWORD       # NEO4J_PASSWORD du fichier Aura
+        sync: false
+      - key: NEO4J_DATABASE       # NEO4J_DATABASE du fichier Aura (souvent l'ID d'instance aussi)
         sync: false
       - key: MUSICBRAINZ_USER_AGENT   # ex : SONORA/1.0 ( ton-email@exemple.com )
         sync: false

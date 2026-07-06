@@ -53,9 +53,11 @@ python -m scripts.seed
 1. Va sur **https://render.com** → **Sign in with GitHub**.
 2. **New +** → **Blueprint** → sélectionne le repo `2Alexis/Sonora`.
    Render lit `render.yaml` et pré-configure le service `sonora`.
-3. Renseigne les **variables secrètes** (onglet Environment) :
-   - `NEO4J_URI` = l'URI Aura (`neo4j+s://…`)
-   - `NEO4J_PASSWORD` = mot de passe Aura
+3. Renseigne les **variables** (onglet Environment) — **recopie-les depuis ton fichier d'identifiants Aura** (⚠️ sur AuraDB Free, `NEO4J_USERNAME` et `NEO4J_DATABASE` valent souvent l'**ID d'instance**, pas `neo4j`) :
+   - `NEO4J_URI` = `NEO4J_URI` du fichier Aura (`neo4j+s://…`)
+   - `NEO4J_USER` = `NEO4J_USERNAME` du fichier Aura
+   - `NEO4J_PASSWORD` = `NEO4J_PASSWORD` du fichier Aura
+   - `NEO4J_DATABASE` = `NEO4J_DATABASE` du fichier Aura
    - `MUSICBRAINZ_USER_AGENT` = `SONORA/1.0 ( ton-email@exemple.com )`
    - `LASTFM_API_KEY` = (optionnel, laisse vide)
 4. **Deploy** (le build compile le frontend + installe le backend, ~5-8 min).
