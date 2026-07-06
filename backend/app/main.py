@@ -63,21 +63,49 @@ for r in (search, imports, artists, recordings, releases, graph, stats):
     app.include_router(r.router, prefix=settings.api_prefix)
 
 
-@app.get("/", tags=["meta"])
-def root():
-    return {
-        "name": settings.app_name,
-        "tagline": "Explore le graphe du son.",
-        "docs": "/docs",
-        "api": settings.api_prefix,
-    }
-
-
 @app.get("/health", tags=["meta"])
 def health():
-    """Healthcheck utilisé par docker-compose."""
+    """Healthcheck utilisé par docker-compose / Render."""
     neo4j_ok = verify_connectivity()
     return {
         "status": "ok" if neo4j_ok else "degraded",
         "neo4j": "up" if neo4j_ok else "down",
     }
+
+
+# --- Service du frontend (déploiement tout-en-un) ---------------------------
+# Si un build frontend est présent (image Docker de prod), l'API le sert aussi :
+# une seule origine, aucun CORS à configurer. En local (dev), ce dossier n'existe
+# pas → l'API se contente d'exposer /api et le front tourne via Vite (:5173).
+import os
+
+from fastapi import HTTPException
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+
+_FRONTEND_DIR = os.path.abspath(
+    os.environ.get("FRONTEND_DIR", os.path.join(os.path.dirname(__file__), "..", "static"))
+)
+_SERVE_FRONTEND = os.path.isfile(os.path.join(_FRONTEND_DIR, "index.html"))
+
+if _SERVE_FRONTEND:
+    app.mount("/assets", StaticFiles(directory=os.path.join(_FRONTEND_DIR, "assets")), name="assets")
+
+    @app.get("/{full_path:path}", include_in_schema=False)
+    def spa(full_path: str):
+        """Sert les fichiers statiques du build, avec repli SPA sur index.html."""
+        if full_path.startswith("api") or full_path in ("health", "docs", "openapi.json", "redoc"):
+            raise HTTPException(status_code=404)
+        candidate = os.path.join(_FRONTEND_DIR, full_path)
+        if full_path and os.path.isfile(candidate):
+            return FileResponse(candidate)
+        return FileResponse(os.path.join(_FRONTEND_DIR, "index.html"))
+else:
+    @app.get("/", tags=["meta"])
+    def root():
+        return {
+            "name": settings.app_name,
+            "tagline": "Explore le graphe du son.",
+            "docs": "/docs",
+            "api": settings.api_prefix,
+        }

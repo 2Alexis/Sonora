@@ -1,11 +1,12 @@
-# Blueprint Render pour le backend SONORA (FastAPI + Neo4j).
+# Blueprint Render — SONORA tout-en-un (frontend + backend dans une image).
 # Sur https://render.com : New + → Blueprint → sélectionne ce repo.
-# Les secrets (sync: false) sont à renseigner dans le dashboard Render.
+# Le Dockerfile racine build le frontend ET lance l'API qui le sert.
+# Il ne reste qu'à brancher une base Neo4j (Aura) via les secrets ci-dessous.
 services:
   - type: web
-    name: sonora-backend
+    name: sonora
     runtime: docker
-    rootDir: backend
+    dockerfilePath: ./Dockerfile
     plan: free
     healthCheckPath: /health
     envVars:
@@ -25,6 +26,4 @@ services:
       - key: MUSICBRAINZ_USER_AGENT   # ex : SONORA/1.0 ( ton-email@exemple.com )
         sync: false
       - key: LASTFM_API_KEY       # optionnel (laisser vide pour désactiver)
-        sync: false
-      - key: CORS_ORIGINS         # ex : https://sonora.vercel.app
         sync: false
