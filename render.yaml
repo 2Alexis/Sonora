@@ -1,0 +1,30 @@
+# Blueprint Render pour le backend SONORA (FastAPI + Neo4j).
+# Sur https://render.com : New + → Blueprint → sélectionne ce repo.
+# Les secrets (sync: false) sont à renseigner dans le dashboard Render.
+services:
+  - type: web
+    name: sonora-backend
+    runtime: docker
+    rootDir: backend
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: NEO4J_USER
+        value: neo4j
+      - key: NEO4J_DATABASE
+        value: neo4j
+      - key: ENRICHMENT_ENABLED
+        value: "true"
+      # --- Secrets à renseigner dans le dashboard Render ---
+      - key: NEO4J_URI            # ex : neo4j+s://xxxx.databases.neo4j.io  (Neo4j Aura)
+        sync: false
+      - key: NEO4J_PASSWORD       # mot de passe de l'instance Aura
+        sync: false
+      - key: MUSICBRAINZ_USER_AGENT   # ex : SONORA/1.0 ( ton-email@exemple.com )
+        sync: false
+      - key: LASTFM_API_KEY       # optionnel (laisser vide pour désactiver)
+        sync: false
+      - key: CORS_ORIGINS         # ex : https://sonora.vercel.app
+        sync: false

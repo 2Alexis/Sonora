@@ -39,6 +39,11 @@ API et une interface web immersive.
 
 ---
 
+## 🌐 Démo en ligne
+
+Déploiement gratuit multi-services : **Neo4j Aura** (base) + **Render** (API) + **Vercel** (frontend).
+Guide pas à pas prêt à l'emploi → **[DEPLOYMENT.md](DEPLOYMENT.md)** (configs déjà incluses : `render.yaml`, `frontend/vercel.json`).
+
 ## ⚡ Démarrage rapide
 
 ```bash
