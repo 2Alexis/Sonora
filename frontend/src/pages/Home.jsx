@@ -31,8 +31,8 @@ function HeroWave() {
           <stop offset="1" stopColor="#2DD4BF" stopOpacity="0" />
         </linearGradient>
       </defs>
-      <path d={wave(130, 46)} stroke="url(#hw1)" strokeWidth="2" strokeDasharray="2 12" strokeLinecap="round" />
-      <path d={wave(140, 30)} stroke="url(#hw2)" strokeWidth="2" strokeDasharray="2 14" strokeLinecap="round" style={{ animationDelay: "-3s" }} />
+      <path d={wave(126, 50)} stroke="url(#hw1)" strokeWidth="2.6" strokeDasharray="3 9" strokeLinecap="round" />
+      <path d={wave(140, 32)} stroke="url(#hw2)" strokeWidth="2.4" strokeDasharray="3 11" strokeLinecap="round" style={{ animationDelay: "-3s" }} />
     </svg>
   );
 }
@@ -48,22 +48,24 @@ export default function Home() {
     <div className="page">
       <div className="container">
         {/* Hero */}
-        <section className="hero" style={{ padding: "56px 0 24px", textAlign: "center" }}>
+        <section className="hero" style={{ padding: "70px 0 30px", textAlign: "center" }}>
           <HeroWave />
-          <span className="badge accent">
-            <Mark size={15} /> MusicBrainz · Deezer · Neo4j
-          </span>
-          <h1 style={{ fontSize: "3.5rem", margin: "22px 0 12px", lineHeight: 1.04 }}>
-            Explore le <span className="gradient-text">graphe du son</span>
-          </h1>
-          <p className="muted" style={{ maxWidth: 620, margin: "0 auto 30px", fontSize: "1.1rem" }}>
-            SONORA cartographie le réseau invisible des collaborations musicales :
-            artistes, morceaux, albums, featurings. Ce que les plateformes cachent,
-            on le rend visible.
-          </p>
-          <div className="row" style={{ justifyContent: "center" }}>
-            <Link to="/search" className="btn btn-primary"><IconSearch width={17} height={17} /> Rechercher un artiste</Link>
-            <Link to="/graph" className="btn"><IconGraph width={17} height={17} /> Voir le graphe</Link>
+          <div className="hero-content">
+            <span className="badge accent">
+              <Mark size={15} /> MusicBrainz · Deezer · Neo4j
+            </span>
+            <h1 style={{ fontSize: "3.5rem", margin: "22px 0 12px", lineHeight: 1.04 }}>
+              Explore le <span className="gradient-text">graphe du son</span>
+            </h1>
+            <p className="muted" style={{ maxWidth: 620, margin: "0 auto 30px", fontSize: "1.1rem" }}>
+              SONORA cartographie le réseau invisible des collaborations musicales :
+              artistes, morceaux, albums, featurings. Ce que les plateformes cachent,
+              on le rend visible.
+            </p>
+            <div className="row" style={{ justifyContent: "center" }}>
+              <Link to="/search" className="btn btn-primary"><IconSearch width={17} height={17} /> Rechercher un artiste</Link>
+              <Link to="/graph" className="btn"><IconGraph width={17} height={17} /> Voir le graphe</Link>
+            </div>
           </div>
         </section>
 

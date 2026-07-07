@@ -672,23 +672,25 @@ body::before {
 }
 .card:hover::before { transform: scaleX(1); }
 
-/* --- Onde sonore décorative (hero) --- */
+/* --- Onde sonore décorative (hero) : DERRIÈRE le texte, centrée sur le titre --- */
 .hero { position: relative; }
 .hero-wave {
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 47%;
   transform: translate(-50%, -50%);
-  width: 130%;
-  max-width: 1100px;
-  height: 260px;
+  width: 132%;
+  max-width: 1280px;
+  height: 320px;
   z-index: 0;
-  opacity: 0.5;
+  opacity: 0.85;
   pointer-events: none;
+  filter: drop-shadow(0 0 14px rgba(255, 140, 70, 0.28));
 }
-.hero-wave path { animation: waveflow 8s linear infinite; }
+.hero-wave path { animation: waveflow 9s linear infinite; }
 @keyframes waveflow { to { stroke-dashoffset: -400; } }
-.hero > * { position: relative; z-index: 1; }
+/* Le contenu passe au-dessus de l'onde */
+.hero-content { position: relative; z-index: 1; }
 
 /* ============================================================================
    Page Recherche — hero + constellation de cartes
