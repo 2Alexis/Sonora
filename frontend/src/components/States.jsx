@@ -1,7 +1,9 @@
 export function Loader({ label = "Chargement…" }) {
   return (
     <div className="state">
-      <div className="spinner" />
+      <div className="eq-loader" aria-label="chargement">
+        <span /><span /><span /><span /><span />
+      </div>
       <span>{label}</span>
     </div>
   );

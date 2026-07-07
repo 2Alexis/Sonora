@@ -570,3 +570,308 @@ input {
 .dim { color: var(--text-dim); }
 .link-accent { color: var(--amber); font-weight: 600; }
 .link-accent:hover { text-decoration: underline; }
+
+/* ============================================================================
+   IDENTITÉ VISUELLE SONORA — son (égaliseur, ondes) × graphe (nœuds, arêtes)
+   ============================================================================ */
+
+/* Fond : trame de points façon papier millimétré / canvas de graphe */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 26px 26px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% -10%, #000 35%, transparent 78%);
+  mask-image: radial-gradient(ellipse at 50% -10%, #000 35%, transparent 78%);
+}
+
+/* --- Logo / wordmark --- */
+.brand-mark { filter: drop-shadow(0 0 10px rgba(255, 107, 74, 0.3)); flex-shrink: 0; }
+.brand-word {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: 0.32em;
+  padding-left: 0.32em;
+}
+.brand-o { color: var(--teal); } /* le "O" = un nœud du graphe */
+
+/* --- Nav : icônes + libellés --- */
+.nav-link { display: inline-flex; align-items: center; gap: 7px; }
+.nav-link svg { opacity: 0.75; }
+.nav-link.active svg, .nav-link:hover svg { opacity: 1; }
+
+/* --- Marqueur de section : mini-égaliseur animé (remplace le point) --- */
+.section-title .dot {
+  position: relative;
+  width: 4px;
+  height: 15px;
+  border-radius: 2px;
+  background: var(--gradient);
+  transform-origin: bottom;
+  margin: 0 12px 0 6px;
+  animation: eqbar 1.1s ease-in-out infinite 0.15s;
+}
+.section-title .dot::before,
+.section-title .dot::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 4px;
+  border-radius: 2px;
+  background: var(--gradient);
+  transform-origin: bottom;
+}
+.section-title .dot::before { left: -6px; height: 9px; animation: eqbar 1.1s ease-in-out infinite 0s; }
+.section-title .dot::after { left: 6px; height: 12px; animation: eqbar 1.1s ease-in-out infinite 0.35s; }
+
+@keyframes eqbar { 0%, 100% { transform: scaleY(0.45); } 50% { transform: scaleY(1); } }
+
+/* --- Loader : égaliseur (remplace le spinner) --- */
+.eq-loader { display: flex; align-items: flex-end; gap: 4px; height: 36px; }
+.eq-loader span {
+  width: 5px;
+  border-radius: 3px;
+  background: var(--gradient);
+  transform-origin: bottom;
+  animation: eqbar 0.95s ease-in-out infinite;
+}
+.eq-loader span:nth-child(1) { height: 45%; animation-delay: 0s; }
+.eq-loader span:nth-child(2) { height: 80%; animation-delay: 0.15s; }
+.eq-loader span:nth-child(3) { height: 100%; animation-delay: 0.3s; }
+.eq-loader span:nth-child(4) { height: 65%; animation-delay: 0.45s; }
+.eq-loader span:nth-child(5) { height: 35%; animation-delay: 0.6s; }
+
+/* --- Détail vinyle sur les avatars à initiales --- */
+.artist-avatar { position: relative; overflow: hidden; }
+.artist-avatar::after {
+  content: "";
+  position: absolute;
+  inset: 22%;
+  border-radius: 50%;
+  border: 1.5px solid rgba(11, 13, 23, 0.28);
+  box-shadow: 0 0 0 3px rgba(11, 13, 23, 0.12);
+}
+
+/* --- Accent de graphe sur les cartes (arête qui s'allume au survol) --- */
+.card { position: relative; overflow: hidden; }
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gradient);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+.card:hover::before { transform: scaleX(1); }
+
+/* --- Onde sonore décorative (hero) --- */
+.hero { position: relative; }
+.hero-wave {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 130%;
+  max-width: 1100px;
+  height: 260px;
+  z-index: 0;
+  opacity: 0.5;
+  pointer-events: none;
+}
+.hero-wave path { animation: waveflow 8s linear infinite; }
+@keyframes waveflow { to { stroke-dashoffset: -400; } }
+.hero > * { position: relative; z-index: 1; }
+
+/* ============================================================================
+   Page Recherche — hero + constellation de cartes
+   ============================================================================ */
+.search-hero {
+  position: relative;
+  min-height: 72vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.search-hero.compact { min-height: auto; padding: 12px 0 24px; }
+
+.search-center {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 620px;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.search-title { font-size: 2.9rem; margin: 18px 0 12px; line-height: 1.05; }
+.search-sub { max-width: 500px; margin: 0 auto 26px; font-size: 1.02rem; }
+
+/* Grosse barre de recherche centrale */
+.search-bigbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: 16px;
+  padding: 8px 8px 8px 46px;
+  box-shadow: var(--shadow);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.search-bigbar:focus-within {
+  border-color: var(--coral);
+  box-shadow: 0 0 0 4px rgba(255, 107, 74, 0.12), var(--shadow);
+}
+.search-bigbar-icon {
+  position: absolute;
+  left: 16px;
+  color: var(--text-dim);
+  pointer-events: none;
+}
+.search-bigbar .input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  padding: 12px 4px;
+  font-size: 1.08rem;
+}
+.search-bigbar .input:focus { border: none; }
+.search-bigbar .btn { flex-shrink: 0; padding: 12px 22px; }
+
+.search-suggestions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+.chip {
+  padding: 6px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.chip:hover { color: var(--text); border-color: var(--border-strong); background: var(--surface-hover); }
+
+/* Arêtes ténues reliant la recherche aux cartes (thème graphe) */
+.float-lines { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+
+/* Cartes flottantes (constellation) */
+.float-slot {
+  position: absolute;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  animation: floaty 7s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes floaty {
+  0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+  50% { transform: translate(-50%, -50%) translateY(-9px); }
+}
+
+.float-card {
+  pointer-events: auto;
+  display: block;
+  width: 138px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 9px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(6px);
+  opacity: 0.8;
+  transform: rotate(var(--rot));
+  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s, box-shadow 0.25s, border-color 0.2s;
+}
+.float-card:hover {
+  opacity: 1;
+  transform: rotate(0deg) scale(1.09);
+  border-color: var(--border-strong);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55), var(--glow);
+  z-index: 6;
+  position: relative;
+}
+.float-card img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 11px;
+  display: block;
+}
+.fc-meta { display: flex; flex-direction: column; gap: 1px; margin-top: 8px; padding: 0 2px; }
+.fc-type {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.fc-artist .fc-type { color: var(--coral); }
+.fc-track .fc-type { color: var(--teal); }
+.fc-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fc-track img { border-radius: 8px; } /* pochette carrée */
+.fc-artist img { border-radius: 50%; } /* portrait rond */
+
+/* Sous 1100px : on masque la constellation, la recherche reste centrée */
+@media (max-width: 1100px) {
+  .float-slot, .float-lines { display: none; }
+  .search-hero { min-height: 52vh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .float-slot { animation: none !important; }
+}
+
+/* --- Icône de feature (accueil) --- */
+.feature-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  color: var(--amber);
+  background: var(--gradient-soft);
+  border: 1px solid rgba(255, 179, 71, 0.22);
+  margin-bottom: 14px;
+}
+
+/* --- Onde du footer --- */
+.footer-wave { display: block; margin: 0 auto 14px; opacity: 0.55; }
+
+/* --- Badge "genre/tag" en forme de nœud --- */
+.badge-node { padding-left: 8px; position: relative; }
+.badge-node::before {
+  content: "";
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  display: inline-block;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-title .dot, .section-title .dot::before, .section-title .dot::after,
+  .eq-loader span, .np-eq i, .hero-wave path { animation: none !important; }
+}
