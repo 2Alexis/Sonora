@@ -3,10 +3,16 @@ import { api, errMessage } from "../api/client.js";
 import { Loader, ErrorState, EmptyState } from "../components/States.jsx";
 import GraphView from "../components/GraphView.jsx";
 
+const DENSITIES = [
+  { value: 100, label: "100" },
+  { value: 300, label: "300" },
+  { value: 5000, label: "Tout" },
+];
+
 export default function Graph() {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
-  const [limit, setLimit] = useState(150);
+  const [limit, setLimit] = useState(300);
 
   useEffect(() => {
     setData(null);
@@ -20,17 +26,28 @@ export default function Graph() {
           <div className="row between">
             <div>
               <h1>Graphe des collaborations</h1>
-              <p>Le réseau des artistes reliés par leurs collaborations. Glisse, zoome, clique sur un nœud.</p>
+              <p>
+                Le réseau des artistes reliés par leurs collaborations et similarités.
+                Glisse, zoome, clique sur un nœud.
+                {data && (
+                  <> {" "}
+                    <span className="muted">
+                      — <strong>{data.nodes.length}</strong> artistes ·{" "}
+                      <strong>{data.edges.length}</strong> liens affichés
+                    </span>
+                  </>
+                )}
+              </p>
             </div>
             <div className="row">
               <span className="dim" style={{ fontSize: "0.85rem" }}>Densité :</span>
-              {[80, 150, 300].map((n) => (
+              {DENSITIES.map((d) => (
                 <button
-                  key={n}
-                  className={"btn btn-sm" + (limit === n ? " btn-primary" : "")}
-                  onClick={() => setLimit(n)}
+                  key={d.value}
+                  className={"btn btn-sm" + (limit === d.value ? " btn-primary" : "")}
+                  onClick={() => setLimit(d.value)}
                 >
-                  {n}
+                  {d.label}
                 </button>
               ))}
             </div>

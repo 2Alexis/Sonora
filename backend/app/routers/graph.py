@@ -10,8 +10,8 @@ router = APIRouter(prefix="/graph", tags=["graph"])
 
 
 @router.get("", response_model=GraphResponse)
-def get_graph(limit: int = Query(150, ge=1, le=500)):
-    """Graphe global des collaborations entre artistes."""
+def get_graph(limit: int = Query(300, ge=1, le=5000)):
+    """Graphe global des collaborations + similarités entre artistes."""
     return graph_service.get_global_graph(limit=limit)
 
 
@@ -22,6 +22,6 @@ def get_artist_graph(mbid: str):
 
 
 @router.get("/collaborations", response_model=GraphResponse)
-def get_collaborations_graph(limit: int = Query(200, ge=1, le=500)):
+def get_collaborations_graph(limit: int = Query(300, ge=1, le=5000)):
     """Graphe dédié aux collaborations."""
     return graph_service.get_collaborations_graph(limit=limit)
